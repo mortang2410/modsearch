@@ -1,0 +1,19 @@
+# dsh bundle layer: mount the modsearch web plugin (dsh/index.js via the
+# package root export; bin stays the CLI, nothing imports the root otherwise)
+# and route the web seam's search capability to it. The base layer pins
+# `searchProvider: deepseek-official`; a patch row replaces the targeted
+# row's whole config, and `searchProvider` is that row's only base key. A
+# later profile patch can pin any provider back.
+#
+# Fork note: this bundle ships a Perplexity Fast Search engine that
+# authenticates with a Nous Portal bearer token read from the dsh credential
+# store (`NOUS_API_KEY`). See README.md for the upstream attribution.
+- id: web
+  config:
+    searchProvider: modsearch
+
+- insert:
+    - id: modsearch
+      name: '@local/modsearch-nous'
+      config:
+        perplexityCredential: NOUS_API_KEY
